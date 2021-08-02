@@ -43,7 +43,6 @@ void setup() {
   AFMS.begin(4000);  // OR with a different frequency, say 4KHz
   while (!Serial);
 
-
   myRadio.begin();
   //set the address
   myRadio.openReadingPipe(0, address);
@@ -58,19 +57,6 @@ void loop() {
   if ( myRadio.available())
   {
     myRadio.read( &data, sizeof(data) );
-    //  Serial.print(data.joyposX);
-    //  Serial.println("joyposX");
-    //Serial.println(data.joyposY);
-    // Serial.println("joyposY");
-    // Serial.println(data.potValue);
-    // Serial.println(data.stateNum);
-    // Serial.println(data.SideWayRightState);
-    // Serial.println(data.SideWayLeftState);
-    // Serial.println(data.ForwardRightState);
-    // Serial.println(data.ForwardLeftState);
-    // Serial.println(data.BackwardRightState);
-    // Serial.println(data.BackwardLeftState);
-
     if (data.joyposX < 485)//Going Forward
     {
       if (data.stateNum == 1)
@@ -98,215 +84,224 @@ void loop() {
         myMotor4->setSpeed(motorspeedModeTwo);
       }
     }
-if (data.joyposX > 600)//Going Backward
-  {
-    if (data.stateNum == 1)
+    if (data.joyposX > 600)//Going Backward
     {
-      myMotor1->run(BACKWARD);
-      myMotor2->run(BACKWARD);
-      myMotor3->run(BACKWARD);
-      myMotor4->run(BACKWARD);
-      motorspeedModeOne = map(data.joyposX, 600, 1023, 0, 255);
-      myMotor1->setSpeed(motorspeedModeOne);
-      myMotor2->setSpeed(motorspeedModeOne);
-      myMotor3->setSpeed(motorspeedModeOne);
-      myMotor4->setSpeed(motorspeedModeOne);
+      if (data.stateNum == 1)
+      {
+        myMotor1->run(BACKWARD);
+        myMotor2->run(BACKWARD);
+        myMotor3->run(BACKWARD);
+        myMotor4->run(BACKWARD);
+        motorspeedModeOne = map(data.joyposX, 600, 1023, 0, 255);
+        myMotor1->setSpeed(motorspeedModeOne);
+        myMotor2->setSpeed(motorspeedModeOne);
+        myMotor3->setSpeed(motorspeedModeOne);
+        myMotor4->setSpeed(motorspeedModeOne);
+      }
+      else if (data.stateNum == 2)//Going Backward
+      {
+        myMotor1->run(BACKWARD);
+        myMotor2->run(BACKWARD);
+        myMotor3->run(BACKWARD);
+        myMotor4->run(BACKWARD);
+        motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
+        myMotor1->setSpeed(motorspeedModeTwo);
+        myMotor2->setSpeed(motorspeedModeTwo);
+        myMotor3->setSpeed(motorspeedModeTwo);
+        myMotor4->setSpeed(motorspeedModeTwo);
+      }
     }
-    else if (data.stateNum == 2)//Going Backward
+    if (data.joyposY > 600)//Going left
     {
-      myMotor1->run(BACKWARD);
-      myMotor2->run(BACKWARD);
-      myMotor3->run(BACKWARD);
-      myMotor4->run(BACKWARD);
-      motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
-      myMotor1->setSpeed(motorspeedModeTwo);
-      myMotor2->setSpeed(motorspeedModeTwo);
-      myMotor3->setSpeed(motorspeedModeTwo);
-      myMotor4->setSpeed(motorspeedModeTwo);
+      if (data.stateNum == 1)
+      {
+        myMotor1->run(FORWARD);
+        myMotor2->run(BACKWARD);
+        myMotor3->run(FORWARD);
+        myMotor4->run(BACKWARD);
+        motorspeedModeOne = map(data.joyposY, 600, 1023, 0, 255);
+        myMotor1->setSpeed(motorspeedModeOne);
+        myMotor2->setSpeed(motorspeedModeOne);
+        myMotor3->setSpeed(motorspeedModeOne);
+        myMotor4->setSpeed(motorspeedModeOne);
+      }
+      else if (data.stateNum == 2)//Going left
+      {
+        myMotor1->run(FORWARD);
+        myMotor2->run(BACKWARD);
+        myMotor3->run(FORWARD);
+        myMotor4->run(BACKWARD);
+        motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
+        myMotor1->setSpeed(motorspeedModeTwo);
+        myMotor2->setSpeed(motorspeedModeTwo);
+        myMotor3->setSpeed(motorspeedModeTwo);
+        myMotor4->setSpeed(motorspeedModeTwo);
+      }
     }
-  }
-  if (data.joyposY > 600)//Going left
-  {
-    if (data.stateNum == 1)
+    if (data.joyposY < 470)//Going right
     {
-      myMotor1->run(BACKWARD);
-      myMotor2->run(FORWARD);
-      myMotor3->run(BACKWARD);
-      myMotor4->run(FORWARD);
-      motorspeedModeOne = map(data.joyposY, 600, 1023, 0, 255);
-      myMotor1->setSpeed(motorspeedModeOne);
-      myMotor2->setSpeed(motorspeedModeOne);
-      myMotor3->setSpeed(motorspeedModeOne);
-      myMotor4->setSpeed(motorspeedModeOne);
+      if (data.stateNum == 1)
+      {
+        myMotor1->run(BACKWARD);
+        myMotor2->run(FORWARD);
+        myMotor3->run(BACKWARD);
+        myMotor4->run(FORWARD);
+        motorspeedModeOne = map(data.joyposY, 470, 0, 0, 255);
+        myMotor1->setSpeed(motorspeedModeOne);
+        myMotor2->setSpeed(motorspeedModeOne);
+        myMotor3->setSpeed(motorspeedModeOne);
+        myMotor4->setSpeed(motorspeedModeOne);
+      }
+      else if (data.stateNum == 2)//Going right
+      {
+        myMotor1->run(BACKWARD);
+        myMotor2->run(FORWARD);
+        myMotor3->run(BACKWARD);
+        myMotor4->run(FORWARD);
+        motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
+        myMotor1->setSpeed(motorspeedModeTwo);
+        myMotor2->setSpeed(motorspeedModeTwo);
+        myMotor3->setSpeed(motorspeedModeTwo);
+        myMotor4->setSpeed(motorspeedModeTwo);
+      }
     }
-    else if (data.stateNum == 2)//Going left
-    {
-      myMotor1->run(BACKWARD);
-      myMotor2->run(FORWARD);
-      myMotor3->run(BACKWARD);
-      myMotor4->run(FORWARD);
-      motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
-      myMotor1->setSpeed(motorspeedModeTwo);
-      myMotor2->setSpeed(motorspeedModeTwo);
-      myMotor3->setSpeed(motorspeedModeTwo);
-      myMotor4->setSpeed(motorspeedModeTwo);
+    if (data.SideWayRightState == 0) {//GREEN BUTTON
+      if (data.stateNum == 1)
+      {
+        myMotor1->run(FORWARD);
+        myMotor2->run(FORWARD);
+        myMotor3->run(BACKWARD);
+        myMotor4->run(BACKWARD);
+        myMotor1->setSpeed(255);
+        myMotor2->setSpeed(255);
+        myMotor3->setSpeed(255);
+        myMotor4->setSpeed(255);
+      }
+      else if (data.stateNum == 2)
+      {
+        motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
+        myMotor1->run(FORWARD);
+        myMotor2->run(FORWARD);
+        myMotor3->run(BACKWARD);
+        myMotor4->run(BACKWARD);
+        myMotor1->setSpeed(motorspeedModeTwo);
+        myMotor2->setSpeed(motorspeedModeTwo);
+        myMotor3->setSpeed(motorspeedModeTwo);
+        myMotor4->setSpeed(motorspeedModeTwo);
+      }
     }
-  }
-  if (data.joyposY < 470)//Going right
-  {
-    if (data.stateNum == 1)
-    {
-      myMotor1->run(FORWARD);
-      myMotor2->run(BACKWARD);
-      myMotor3->run(FORWARD);
-      myMotor4->run(BACKWARD);
-      motorspeedModeOne = map(data.joyposY, 470, 0, 0, 255);
-      myMotor1->setSpeed(motorspeedModeOne);
-      myMotor2->setSpeed(motorspeedModeOne);
-      myMotor3->setSpeed(motorspeedModeOne);
-      myMotor4->setSpeed(motorspeedModeOne);
+    if (data.SideWayLeftState == 0) {//GREEN BUTTON
+      if (data.stateNum == 1)
+      {
+        myMotor1->run(BACKWARD);
+        myMotor2->run(BACKWARD);
+        myMotor3->run(FORWARD);
+        myMotor4->run(FORWARD);
+        myMotor1->setSpeed(255);
+        myMotor2->setSpeed(255);
+        myMotor3->setSpeed(255);
+        myMotor4->setSpeed(255);
+      }
+      else if (data.stateNum == 2)
+      {
+        motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
+        myMotor1->run(BACKWARD);
+        myMotor2->run(BACKWARD);
+        myMotor3->run(FORWARD);
+        myMotor4->run(FORWARD);
+        myMotor1->setSpeed(motorspeedModeTwo);
+        myMotor2->setSpeed(motorspeedModeTwo);
+        myMotor3->setSpeed(motorspeedModeTwo);
+        myMotor4->setSpeed(motorspeedModeTwo);
+      }
     }
-    else if (data.stateNum == 2)//Going right
-    {
-      myMotor1->run(FORWARD);
-      myMotor2->run(BACKWARD);
-      myMotor3->run(FORWARD);
-      myMotor4->run(BACKWARD);
-      motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
-      myMotor1->setSpeed(motorspeedModeTwo);
-      myMotor2->setSpeed(motorspeedModeTwo);
-      myMotor3->setSpeed(motorspeedModeTwo);
-      myMotor4->setSpeed(motorspeedModeTwo);
+    if (data.ForwardRightState == 0) {//YELLOW BUTTON
+      if (data.stateNum == 1)
+      {
+        myMotor1->run(RELEASE);
+        myMotor2->run(RELEASE);
+        myMotor3->run(FORWARD);
+        myMotor4->run(FORWARD);
+        myMotor3->setSpeed(255);
+        myMotor4->setSpeed(255);
+      }
+      else if (data.stateNum == 2)
+      {
+        motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
+        myMotor1->run(RELEASE);
+        myMotor2->run(RELEASE);
+        myMotor3->run(FORWARD);
+        myMotor4->run(FORWARD);
+        myMotor3->setSpeed(motorspeedModeTwo);
+        myMotor4->setSpeed(motorspeedModeTwo);
+      }
     }
-  }
-  if (data.SideWayRightState == 0) {
-    if (data.stateNum == 1)
-    {
-      motorspeedModeOne = map(data.joyposY, 470, 0, 0, 255);
-      myMotor1->run(BACKWARD);
-      myMotor2->run(FORWARD);
-      myMotor3->run(FORWARD);
-      myMotor4->run(BACKWARD);
-      myMotor1->setSpeed(motorspeedModeOne);
-      myMotor2->setSpeed(motorspeedModeOne);
-      myMotor3->setSpeed(motorspeedModeOne);
-      myMotor4->setSpeed(motorspeedModeOne);
+    if (data.ForwardLeftState == 0) {//YELLOW BUTTON
+      if (data.stateNum == 1)
+      {
+        myMotor1->run(FORWARD);
+        myMotor2->run(FORWARD);
+        myMotor3->run(RELEASE);
+        myMotor4->run(RELEASE);
+        myMotor1->setSpeed(255);
+        myMotor2->setSpeed(255);
+      }
+      else if (data.stateNum == 2)
+      {
+        motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
+        myMotor1->run(FORWARD);
+        myMotor2->run(FORWARD);
+        myMotor3->run(RELEASE);
+        myMotor4->run(RELEASE);
+        myMotor1->setSpeed(motorspeedModeTwo);
+        myMotor2->setSpeed(motorspeedModeTwo);
+      }
     }
-    else if (data.stateNum == 2)
-    {
-      motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
-      myMotor1->run(BACKWARD);
-      myMotor2->run(FORWARD);
-      myMotor3->run(FORWARD);
-      myMotor4->run(BACKWARD);
-      myMotor1->setSpeed(motorspeedModeTwo);
-      myMotor2->setSpeed(motorspeedModeTwo);
-      myMotor3->setSpeed(motorspeedModeTwo);
-      myMotor4->setSpeed(motorspeedModeTwo);
+    else if (data.BackwardRightState == 0) {// BLUE BUTTON
+      if (data.stateNum == 1)
+      {
+        myMotor1->run(BACKWARD);
+        myMotor2->run(BACKWARD);
+        myMotor3->run(RELEASE);
+        myMotor4->run(RELEASE);
+        myMotor2->setSpeed(255);
+        myMotor3->setSpeed(255);
+      }
+      else if (data.stateNum == 2)
+      {
+        motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
+        myMotor1->run(BACKWARD);
+        myMotor2->run(BACKWARD);
+        myMotor3->run(RELEASE);
+        myMotor4->run(RELEASE);
+        myMotor1->setSpeed(motorspeedModeTwo);
+        myMotor2->setSpeed(motorspeedModeTwo);
+      }
     }
-  }
-  if (data.SideWayLeftState == 0) {
-    if (data.stateNum == 1)
-    {
-      motorspeedModeOne = map(data.joyposY, 470, 0, 0, 255);
-      myMotor1->run(FORWARD);
-      myMotor2->run(BACKWARD);
-      myMotor3->run(BACKWARD);
-      myMotor4->run(FORWARD);
-      myMotor1->setSpeed(motorspeedModeOne);
-      myMotor2->setSpeed(motorspeedModeOne);
-      myMotor3->setSpeed(motorspeedModeOne);
-      myMotor4->setSpeed(motorspeedModeOne);
+    else if (data.BackwardLeftState == 0) {// BLUE BUTTON
+      if (data.stateNum == 1)
+      {
+        myMotor1->run(RELEASE);
+        myMotor2->run(RELEASE);
+        myMotor3->run(BACKWARD);
+        myMotor4->run(BACKWARD);
+        myMotor3->setSpeed(255);
+        myMotor4->setSpeed(255);
+      }
+      else if (data.stateNum == 2)
+      {
+        motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
+        myMotor1->run(RELEASE);
+        myMotor2->run(RELEASE);
+        myMotor3->run(BACKWARD);
+        myMotor4->run(BACKWARD);
+        myMotor3->setSpeed(motorspeedModeTwo);
+        myMotor4->setSpeed(motorspeedModeTwo);
+      }
     }
-    else if (data.stateNum == 2)
-    {
-      motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
-      myMotor1->run(FORWARD);
-      myMotor2->run(BACKWARD);
-      myMotor3->run(BACKWARD);
-      myMotor4->run(FORWARD);
-      myMotor1->setSpeed(motorspeedModeTwo);
-      myMotor2->setSpeed(motorspeedModeTwo);
-      myMotor3->setSpeed(motorspeedModeTwo);
-      myMotor4->setSpeed(motorspeedModeTwo);
-    }
-  }
-  if (data.ForwardRightState == 0) {
-    if (data.stateNum == 1)
-    {
-      motorspeedModeOne = map(data.joyposY, 470, 0, 0, 255);
-      myMotor1->run(FORWARD);
-      myMotor4->run(FORWARD);
-      myMotor1->setSpeed(motorspeedModeOne);
-      myMotor4->setSpeed(motorspeedModeOne);
-    }
-    else if (data.stateNum == 2)
-    {
-      motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
-      myMotor1->run(FORWARD);
-      myMotor4->run(FORWARD);
-      myMotor1->setSpeed(motorspeedModeTwo);
-      myMotor4->setSpeed(motorspeedModeTwo);
-    }
-  }
-  else if (data.ForwardLeftState == 0) {
-    if (data.stateNum == 1)
-    {
-      motorspeedModeOne = map(data.joyposY, 470, 0, 0, 255);
-      myMotor2->run(FORWARD);
-      myMotor3->run(FORWARD);
-      myMotor2->setSpeed(motorspeedModeOne);
-      myMotor3->setSpeed(motorspeedModeOne);
-    }
-    else if (data.stateNum == 2)
-    {
-      motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
-      myMotor2->run(FORWARD);
-      myMotor3->run(FORWARD);
-      // myMotor4->run(BACKWARD);
-      myMotor2->setSpeed(motorspeedModeTwo);
-      myMotor3->setSpeed(motorspeedModeTwo);
-    }
-  }
-  else if (data.BackwardRightState == 0) {
-    if (data.stateNum == 1)
-    {
-      motorspeedModeOne = map(data.joyposY, 470, 0, 0, 255);
-      myMotor2->run(BACKWARD);
-      myMotor3->run(BACKWARD);
-      myMotor2->setSpeed(motorspeedModeOne);
-      myMotor3->setSpeed(motorspeedModeOne);
-    }
-    else if (data.stateNum == 2)
-    {
-      motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
-      myMotor2->run(BACKWARD);
-      myMotor3->run(BACKWARD);
-      myMotor2->setSpeed(motorspeedModeTwo);
-      myMotor3->setSpeed(motorspeedModeTwo);
-    }
-  }
-  else if (data.BackwardLeftState == 0) {
-    if (data.stateNum == 1)
-    {
-      motorspeedModeOne = map(data.joyposY, 470, 0, 0, 255);
-      myMotor1->run(BACKWARD);
-      myMotor4->run(BACKWARD);
-      myMotor1->setSpeed(motorspeedModeOne);
-      myMotor4->setSpeed(motorspeedModeOne);
-    }
-    else if (data.stateNum == 2)
-    {
-      motorspeedModeTwo = map(data.potValue, 0, 1023, 0, 255);
-      myMotor1->run(BACKWARD);
-      myMotor4->run(BACKWARD);
-      myMotor1->setSpeed(motorspeedModeTwo);
-      myMotor4->setSpeed(motorspeedModeTwo);
-    }
-  }
-  myMotor1->run(RELEASE);
-  myMotor2->run(RELEASE);
-  myMotor3->run(RELEASE);
-  myMotor4->run(RELEASE);
+    myMotor1->run(RELEASE);
+    myMotor2->run(RELEASE);
+    myMotor3->run(RELEASE);
+    myMotor4->run(RELEASE);
   }
 }
